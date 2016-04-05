@@ -21,14 +21,14 @@ public class Todolist implements Serializable {
 	@Temporal(TemporalType.DATE)
 	private Date completedate;
 
-	private BigDecimal doerid;
+	private int doerid;
 
 	@Temporal(TemporalType.DATE)
 	private Date duedate;
 
 	private String itemdescription;
 
-	private BigDecimal statusid;
+	private int statusid;
 
 	public Todolist() {
 	}
@@ -49,12 +49,12 @@ public class Todolist implements Serializable {
 		this.completedate = completedate;
 	}
 
-	public BigDecimal getDoerid() {
+	public int getDoerid() {
 		return this.doerid;
 	}
 
-	public void setDoerid(BigDecimal doerid) {
-		this.doerid = doerid;
+	public void setDoerid(int i) {
+		this.doerid = i;
 	}
 
 	public Date getDuedate() {
@@ -73,12 +73,12 @@ public class Todolist implements Serializable {
 		this.itemdescription = itemdescription;
 	}
 
-	public BigDecimal getStatusid() {
+	public int getStatusid() {
 		return this.statusid;
 	}
 
-	public void setStatusid(BigDecimal statusid) {
-		this.statusid = statusid;
+	public void setStatusid(int i) {
+		this.statusid = i;
 	}
 
 }

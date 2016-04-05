@@ -1,6 +1,9 @@
 
 
 import java.io.IOException;
+import java.util.Date;
+import java.text.ParseException;
+import java.text.SimpleDateFormat;
 import java.util.List;
 
 import javax.servlet.ServletException;
@@ -44,27 +47,121 @@ public class ToDoListProcess extends HttpServlet {
 		//doGet(request, response);
 
 		String _assignmentName = "";
-		long toDoLisCount = 0;
+		long toDoLisCount = 0, count=0;
 		ToDoListDB listFromDb = new ToDoListDB();
+		ToDoListDB addedList = new ToDoListDB();
+		ToDoListDB completedList = new ToDoListDB();
+
 		HttpSession session = request.getSession();
+		String message="";
 
 		List<Todolist> myToDoList=null;
-		String _name="";
-
+		
 		if(request.getParameter("page").equals("1")==true)
 		{
-			_name=request.getParameter("name"); 
+		
 			toDoLisCount = listFromDb.findAnyToDoList();
 			if(toDoLisCount > 0)
 			{
-
-				myToDoList = listFromDb.findAllTodolistWithName().getResultList();
+				myToDoList = listFromDb.findAllTodolist().getResultList();
 
 				//System.out.println("We have something in the assignmentList");
 				request.setAttribute("myToDoList", myToDoList);
 				request.getRequestDispatcher("/MyToDoListPage.jsp").forward(request, response);
-
 			}
 		}
+		else if(request.getParameter("page").equals("2")==true) //update 
+		{
+			Todolist _updatelist= new Todolist();
+			Date compDate=null, dueDate=null;
+			
+			try {
+				dueDate = (Date) new SimpleDateFormat("yyyy-MM-dd").parse(request.getParameter("duedate"));
+			} catch (ParseException e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+			}
+			try {
+				compDate = (Date) new SimpleDateFormat("yyyy-MM-dd").parse(request.getParameter("completedate"));
+			} catch (ParseException e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+			}
+
+			int _listid = Integer.parseInt(request.getParameter("listid"));
+			int _responsible = Integer.parseInt(request.getParameter("responsible"));
+			int _status = Integer.parseInt(request.getParameter("status"));
+			
+			_updatelist.setListid(Integer.parseInt(request.getParameter("listid")));
+			_updatelist.setCompletedate(compDate);
+			_updatelist.setDuedate(dueDate);
+			_updatelist.setDoerid(Integer.parseInt(request.getParameter("responsible")));
+			_updatelist.setStatusid(Integer.parseInt(request.getParameter("status")));
+			_updatelist.setItemdescription(request.getParameter("descrip"));
+						
+			ToDoListDB.update(_updatelist);
+
+//			count=listFromDb.updateToDoList(_listid, _responsible, request.getParameter("descrip"), _status);
+//			if(count==1)
+//			{
+//				message+="<td>"+_listid+"</td>";
+//				message+="<td>"+request.getParameter("descrip")+"</td>";
+//				message+="<td>"+_responsible+"</td>";
+//				message+="<td>"+_status+"</td>";
+//
+//				request.setAttribute("message", message);
+//				request.getRequestDispatcher("/UpdatedList.jsp").forward(request, response);
+//			}
+		}
+		else if(request.getParameter("page").equals("3")==true) //add 
+		{
+			Todolist _list= new Todolist();
+			Date compDate=null, dueDate=null;
+			
+			try {
+				dueDate = (Date) new SimpleDateFormat("yyyy-MM-dd").parse(request.getParameter("duedate"));
+			} catch (ParseException e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+			}
+			try {
+				compDate = (Date) new SimpleDateFormat("yyyy-MM-dd").parse(request.getParameter("completedate"));
+			} catch (ParseException e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+			}
+			
+			_list.setListid(Integer.parseInt(request.getParameter("listid")));
+			_list.setCompletedate(compDate);
+			_list.setDuedate(dueDate);
+			_list.setDoerid(Integer.parseInt(request.getParameter("responsible")));
+			_list.setStatusid(Integer.parseInt(request.getParameter("status")));
+			_list.setItemdescription(request.getParameter("descrip"));
+						
+			ToDoListDB.insert(_list);
+			
+			toDoLisCount = addedList.findAnyToDoList();
+			if(toDoLisCount > 0)
+			{
+				myToDoList = addedList.findAllTodolist().getResultList();
+
+				//System.out.println("We have something in the assignmentList");
+				request.setAttribute("myToDoList", myToDoList);
+				request.getRequestDispatcher("/MyToDoListPage.jsp").forward(request, response);
+			}
+		}
+		else if(request.getParameter("page").equals("4")==true) //report 
+		{
+			toDoLisCount = completedList.findAnyCompletedList();
+			if(toDoLisCount > 0)
+			{
+				myToDoList = completedList.findAllCompletedLis().getResultList();
+
+				//System.out.println("We have something in the assignmentList");
+				request.setAttribute("myToDoList", myToDoList);
+				request.getRequestDispatcher("/CompletedList.jsp").forward(request, response);
+			}
+		}
+
 	}
 }
