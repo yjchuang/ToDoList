@@ -13,6 +13,7 @@
 		<tr>
 			<th>List Id</th>
 			<th>Description</th>
+			<th>Due Date</th>
 			<th>Responsible Person ID</th>
 			<th>Status</th>
 		</tr>

@@ -104,13 +104,14 @@ public class ToDoListProcess extends HttpServlet {
 //			count=listFromDb.updateToDoList(_listid, _responsible, request.getParameter("descrip"), _status);
 //			if(count==1)
 //			{
-//				message+="<td>"+_listid+"</td>";
-//				message+="<td>"+request.getParameter("descrip")+"</td>";
-//				message+="<td>"+_responsible+"</td>";
-//				message+="<td>"+_status+"</td>";
-//
-//				request.setAttribute("message", message);
-//				request.getRequestDispatcher("/UpdatedList.jsp").forward(request, response);
+				message+="<td>"+_listid+"</td>";
+				message+="<td>"+request.getParameter("descrip")+"</td>";
+				message+="<td>"+dueDate+"</td>";
+				message+="<td>"+_responsible+"</td>";
+				message+="<td>"+_status+"</td>";
+
+				request.setAttribute("message", message);
+				request.getRequestDispatcher("/UpdatedList.jsp").forward(request, response);
 //			}
 		}
 		else if(request.getParameter("page").equals("3")==true) //add 
